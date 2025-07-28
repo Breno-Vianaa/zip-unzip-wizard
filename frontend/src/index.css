@@ -1,0 +1,487 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 0 0% 100%;
+        --foreground: 222.2 84% 4.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 222.2 84% 4.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 222.2 84% 4.9%;
+        --primary: 222.2 47.4% 11.2%;
+        --primary-foreground: 210 40% 98%;
+        --secondary: 210 40% 96%;
+        --secondary-foreground: 222.2 84% 4.9%;
+        --muted: 210 40% 96%;
+        --muted-foreground: 215.4 16.3% 46.9%;
+        --accent: 210 40% 96%;
+        --accent-foreground: 222.2 84% 4.9%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 214.3 31.8% 91.4%;
+        --input: 214.3 31.8% 91.4%;
+        --ring: 222.2 84% 4.9%;
+        --radius: 0.5rem;
+        --chart-1: 12 76% 61%;
+        --chart-2: 173 58% 39%;
+        --chart-3: 197 37% 24%;
+        --chart-4: 43 74% 66%;
+        --chart-5: 27 87% 67%;
+
+        /* Cores específicas do BVOLT */
+        --bvolt-blue: 195 100% 50%;
+        --bvolt-purple: 285 100% 62%;
+        --bvolt-blue-dark: 195 100% 40%;
+        --bvolt-purple-dark: 285 100% 50%;
+
+        /* Sidebar colors */
+        --sidebar-background: 0 0% 98%;
+        --sidebar-foreground: 240 5.3% 26.1%;
+        --sidebar-primary: 240 5.9% 10%;
+        --sidebar-primary-foreground: 0 0% 98%;
+        --sidebar-accent: 240 4.8% 95.9%;
+        --sidebar-accent-foreground: 240 5.9% 10%;
+        --sidebar-border: 220 13% 91%;
+        --sidebar-ring: 217.2 91.2% 59.8%;
+    }
+
+    .dark {
+        /* Tema escuro com paleta BVOLT correta */
+        --background: 0 0% 4%;
+        /* #0A0A0A - Preto profundo */
+        --foreground: 0 0% 88%;
+        /* #E0E0E0 - Cinza claro para texto principal */
+        --card: 0 0% 6%;
+        /* Fundo de cards um pouco mais claro */
+        --card-foreground: 0 0% 88%;
+        /* #E0E0E0 */
+        --popover: 0 0% 6%;
+        --popover-foreground: 0 0% 88%;
+        --primary: 195 100% 50%;
+        /* #00CFFF - Ciano neon */
+        --primary-foreground: 0 0% 4%;
+        --secondary: 285 100% 62%;
+        /* #C43CFF - Roxo neon */
+        --secondary-foreground: 0 0% 4%;
+        --muted: 0 0% 8%;
+        /* Fundo suave */
+        --muted-foreground: 0 0% 63%;
+        /* #A0A0A0 - Texto secundário/desativado */
+        --accent: 0 0% 8%;
+        /* Fundo de hover */
+        --accent-foreground: 0 0% 88%;
+        --destructive: 0 62.8% 50%;
+        --destructive-foreground: 0 0% 88%;
+        --border: 0 0% 15%;
+        /* Bordas mais sutis */
+        --input: 0 0% 8%;
+        --ring: 195 100% 50%;
+        /* Ciano neon para focus */
+
+        /* Cores específicas do BVOLT para tema escuro */
+        --bvolt-blue: 195 100% 50%;
+        /* #00CFFF - Ciano neon */
+        --bvolt-purple: 285 100% 62%;
+        /* #C43CFF - Roxo neon */
+        --bvolt-blue-dark: 195 100% 40%;
+        --bvolt-purple-dark: 285 100% 50%;
+
+        /* Sidebar colors for dark theme */
+        --sidebar-background: 0 0% 4%;
+        /* Mesmo que background */
+        --sidebar-foreground: 0 0% 88%;
+        --sidebar-primary: 195 100% 50%;
+        /* Ciano neon */
+        --sidebar-primary-foreground: 0 0% 4%;
+        --sidebar-accent: 0 0% 8%;
+        --sidebar-accent-foreground: 0 0% 88%;
+        --sidebar-border: 0 0% 15%;
+        --sidebar-ring: 285 100% 62%;
+        /* Roxo neon */
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+    }
+
+    /* Força o background para aplicar corretamente no modo escuro */
+    html.dark,
+    html.dark body {
+        background-color: hsl(0 0% 4%) !important;
+        color: hsl(0 0% 88%) !important;
+    }
+}
+
+/* Gradiente neon para bordas no tema escuro */
+.dark .border-neon {
+    border-image: linear-gradient(90deg, #00CFFF, #C43CFF) 1;
+}
+
+/* Efeitos neon para elementos especiais */
+.dark .neon-glow {
+    box-shadow: 0 0 5px rgba(0, 207, 255, 0.3), 0 0 10px rgba(196, 60, 255, 0.2);
+}
+
+/* Garante que todos os elementos principais tenham fundo escuro */
+.dark .bg-slate-50,
+.dark .bg-white {
+    background-color: hsl(0 0% 4%) !important;
+}
+
+.dark .text-slate-900 {
+    color: hsl(0 0% 88%) !important;
+}
+
+.dark .text-slate-600,
+.dark .text-slate-500 {
+    color: hsl(0 0% 63%) !important;
+}
+
+/* Ajustes específicos para gráficos no tema escuro */
+.dark .recharts-cartesian-axis-tick-value {
+    fill: hsl(0 0% 63%) !important;
+}
+
+.dark .recharts-cartesian-grid-horizontal line,
+.dark .recharts-cartesian-grid-vertical line {
+    stroke: hsl(0 0% 15%) !important;
+}
+
+/* ===========================
+   SISTEMA DE ESTILOS CUSTOMIZADOS
+   ========================== */
+
+/* Garantia que os cards tenham fundo correto */
+.dark [data-component-name="card"],
+.dark .bg-card {
+    background-color: hsl(0 0% 6%) !important;
+}
+
+/* ===========================
+   FILTROS E SELECTS NO MODO ESCURO
+   ========================== */
+
+/* Corrige filtros/selects para ficarem escuros no modo escuro */
+.dark select,
+.dark .filter-select {
+    background-color: hsl(0 0% 8%) !important;
+    color: hsl(0 0% 88%) !important;
+    border-color: hsl(0 0% 15%) !important;
+}
+
+.dark select:focus,
+.dark .filter-select:focus {
+    ring-color: hsl(195 100% 50%) !important;
+    border-color: hsl(195 100% 50%) !important;
+}
+
+.dark option {
+    background-color: hsl(0 0% 8%) !important;
+    color: hsl(0 0% 88%) !important;
+}
+
+/* ===========================
+   HOVER EFFECTS CUSTOMIZADOS
+   ========================== */
+
+/* Remove hover claro no modo escuro e adiciona borda azul */
+.dark .produto-item:hover,
+.dark .fornecedor-item:hover,
+.dark .pagamento-item:hover {
+    background-color: transparent !important;
+    border: 2px solid hsl(195 100% 50%) !important;
+    transition: border-color 0.2s ease-in-out;
+}
+
+/* Hover padrão para modo claro */
+.produto-item:hover,
+.fornecedor-item:hover,
+.pagamento-item:hover {
+    background-color: hsl(210 40% 96%);
+    transition: background-color 0.2s ease-in-out;
+}
+
+/* Estilo base para items listados */
+.produto-item,
+.fornecedor-item,
+.pagamento-item {
+    padding: 1rem;
+    border: 1px solid hsl(214.3 31.8% 91.4%);
+    border-radius: 0.5rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.dark .produto-item,
+.dark .fornecedor-item,
+.dark .pagamento-item {
+    border-color: hsl(0 0% 15%);
+}
+
+/* ===========================
+   COMPONENTES DE BUSCA
+   ========================== */
+
+/* Estilização dos campos de busca */
+.search-container {
+    position: relative;
+    flex: 1;
+}
+
+.search-input {
+    padding-left: 2.5rem;
+    width: 100%;
+}
+
+.search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1rem;
+    height: 1rem;
+    color: hsl(215.4 16.3% 46.9%);
+}
+
+.dark .search-icon {
+    color: hsl(0 0% 63%);
+}
+
+/* ===========================
+   BOTÕES CUSTOMIZADOS
+   ========================== */
+
+/* Botão principal com gradiente BVOLT */
+.btn-bvolt-primary {
+    background: linear-gradient(135deg, hsl(195 100% 50%), hsl(285 100% 62%));
+    color: white;
+    border: none;
+    font-weight: 500;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.btn-bvolt-primary:hover {
+    opacity: 0.9;
+}
+
+/* Botão secundário */
+.btn-secondary {
+    background-color: hsl(210 40% 96%);
+    color: hsl(222.2 84% 4.9%);
+    border: 1px solid hsl(214.3 31.8% 91.4%);
+}
+
+.dark .btn-secondary {
+    background-color: hsl(0 0% 8%);
+    color: hsl(0 0% 88%);
+    border-color: hsl(0 0% 15%);
+}
+
+.btn-secondary:hover {
+    background-color: hsl(210 40% 94%);
+}
+
+.dark .btn-secondary:hover {
+    background-color: hsl(0 0% 10%);
+}
+
+/* ===========================
+   BADGES E INDICADORES
+   ========================== */
+
+/* Badge de sucesso/ativo */
+.badge-success {
+    background-color: hsl(142.1 76.2% 36.3%);
+    color: white;
+}
+
+.dark .badge-success {
+    background-color: hsl(142.1 70% 25%);
+    color: hsl(0 0% 88%);
+}
+
+/* Badge de erro/inativo */
+.badge-error {
+    background-color: hsl(0 84.2% 60.2%);
+    color: white;
+}
+
+.dark .badge-error {
+    background-color: hsl(0 70% 45%);
+    color: hsl(0 0% 88%);
+}
+
+/* Badge de aviso/pendente */
+.badge-warning {
+    background-color: hsl(47.9 95.8% 53.1%);
+    color: hsl(222.2 84% 4.9%);
+}
+
+.dark .badge-warning {
+    background-color: hsl(47.9 85% 43%);
+    color: hsl(0 0% 4%);
+}
+
+/* Badge de informação */
+.badge-info {
+    background-color: hsl(195 100% 50%);
+    color: white;
+}
+
+.dark .badge-info {
+    background-color: hsl(195 100% 40%);
+    color: hsl(0 0% 88%);
+}
+
+/* ===========================
+   CARDS E CONTAINERS
+   ========================== */
+
+/* Card principal */
+.card-container {
+    background-color: hsl(0 0% 100%);
+    border: 1px solid hsl(214.3 31.8% 91.4%);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+}
+
+.dark .card-container {
+    background-color: hsl(0 0% 6%);
+    border-color: hsl(0 0% 15%);
+}
+
+/* Header de card */
+.card-header {
+    border-bottom: 1px solid hsl(214.3 31.8% 91.4%);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.dark .card-header {
+    border-bottom-color: hsl(0 0% 15%);
+}
+
+/* ===========================
+   TEXTO E TIPOGRAFIA
+   ========================== */
+
+/* Texto principal */
+.text-primary {
+    color: hsl(222.2 84% 4.9%);
+}
+
+.dark .text-primary {
+    color: hsl(0 0% 88%);
+}
+
+/* Texto secundário */
+.text-secondary {
+    color: hsl(215.4 16.3% 46.9%);
+}
+
+.dark .text-secondary {
+    color: hsl(0 0% 63%);
+}
+
+/* Texto muted */
+.text-muted {
+    color: hsl(215.4 16.3% 46.9%);
+    font-size: 0.875rem;
+}
+
+.dark .text-muted {
+    color: hsl(0 0% 63%);
+}
+
+/* ===========================
+   UTILITÁRIOS DE LAYOUT
+   ========================== */
+
+/* Flexbox utilities */
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-start {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+/* Grid utilities */
+.grid-cols-auto {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+/* Spacing utilities */
+.space-y-4>*+* {
+    margin-top: 1rem;
+}
+
+.space-y-6>*+* {
+    margin-top: 1.5rem;
+}
+
+/* ===========================
+   ANIMAÇÕES E TRANSIÇÕES
+   ========================== */
+
+/* Transição suave */
+.transition-smooth {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Animação de fade in */
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===========================
+   RESPONSIVE DESIGN
+   ========================== */
+
+/* Mobile first approach */
+@media (max-width: 768px) {
+    .card-container {
+        padding: 1rem;
+    }
+
+    .flex-between {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    .grid-cols-auto {
+        grid-template-columns: 1fr;
+    }
+}
