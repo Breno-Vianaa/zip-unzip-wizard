@@ -3,3 +3,10 @@
     "jspdf": "^3.0.1"
   }
 }
+
+{
+  "scripts": {
+    "dev": "vite",
+    "build:dev": "vite build --mode development"
+  }
+}
