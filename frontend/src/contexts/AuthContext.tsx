@@ -4,23 +4,46 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 // Tipos de usuário do sistema BVOLT
 export type UserType = 'admin' | 'gerente' | 'vendedor';
 
+// Estrutura de permissões por módulo e ação
+export interface Permission {
+    view?: boolean;
+    create?: boolean;
+    edit?: boolean;
+    delete?: boolean;
+}
+
+export interface UserPermissions {
+    produtos: Permission;
+    vendas: Permission;
+    clientes: Permission;
+    fornecedores: Permission;
+    estoque: Permission;
+    relatorios: Permission;
+    financeiro: Permission;
+    usuarios: Permission;
+    configuracoes: Permission;
+}
+
 // Interface para o usuário logado
 export interface User {
     id: string;
     nome: string;
-    email: string;
+    usuario: string;
     tipo: UserType;
+    permissions: UserPermissions;
     avatar?: string;
 }
 
 // Interface para o contexto de autenticação
 interface AuthContextType {
     user: User | null;
-    login: (email: string, password: string) => Promise<boolean>;
+    login: (usuario: string, password: string) => Promise<boolean>;
     logout: () => void;
     isAuthenticated: boolean;
     loading: boolean;
-    hasPermission: (requiredRole: UserType[]) => boolean;
+    hasPermission: (module: string, action: string) => boolean;
+    hasRolePermission: (requiredRole: UserType[]) => boolean;
+    getDefaultPermissions: (tipo: UserType) => UserPermissions;
 }
 
 // Criação do contexto
@@ -35,28 +58,77 @@ export const useAuth = () => {
     return context;
 };
 
+// Função para gerar permissões padrão baseadas no tipo
+const getDefaultPermissions = (tipo: UserType): UserPermissions => {
+    const basePermissions: UserPermissions = {
+        produtos: { view: false, create: false, edit: false, delete: false },
+        vendas: { view: false, create: false, edit: false, delete: false },
+        clientes: { view: false, create: false, edit: false, delete: false },
+        fornecedores: { view: false, create: false, edit: false, delete: false },
+        estoque: { view: false, create: false, edit: false, delete: false },
+        relatorios: { view: false, create: false, edit: false, delete: false },
+        financeiro: { view: false, create: false, edit: false, delete: false },
+        usuarios: { view: false, create: false, edit: false, delete: false },
+        configuracoes: { view: false, create: false, edit: false, delete: false }
+    };
+
+    switch (tipo) {
+        case 'admin':
+            // Admin tem acesso total a tudo
+            Object.keys(basePermissions).forEach(module => {
+                basePermissions[module as keyof UserPermissions] = {
+                    view: true, create: true, edit: true, delete: true
+                };
+            });
+            break;
+        
+        case 'gerente':
+            // Gerente pode gerenciar produtos, estoque, vendas, clientes, fornecedores, relatórios e financeiro
+            basePermissions.produtos = { view: true, create: true, edit: true, delete: true };
+            basePermissions.vendas = { view: true, create: true, edit: true, delete: true };
+            basePermissions.clientes = { view: true, create: true, edit: true, delete: true };
+            basePermissions.fornecedores = { view: true, create: true, edit: true, delete: true };
+            basePermissions.estoque = { view: true, create: true, edit: true, delete: true };
+            basePermissions.relatorios = { view: true, create: true, edit: true, delete: false };
+            basePermissions.financeiro = { view: true, create: true, edit: true, delete: false };
+            break;
+        
+        case 'vendedor':
+            // Vendedor pode visualizar produtos, realizar vendas e cadastrar clientes
+            basePermissions.produtos = { view: true, create: false, edit: false, delete: false };
+            basePermissions.vendas = { view: true, create: true, edit: true, delete: false };
+            basePermissions.clientes = { view: true, create: true, edit: true, delete: false };
+            break;
+    }
+
+    return basePermissions;
+};
+
 // Dados mockados dos usuários para demonstração
 const mockUsers: (User & { password: string })[] = [
     {
         id: '1',
         nome: 'Admin Sistema',
-        email: 'admin@bvolt.com',
+        usuario: 'admin',
         password: '123456',
-        tipo: 'admin'
+        tipo: 'admin',
+        permissions: getDefaultPermissions('admin')
     },
     {
         id: '2',
         nome: 'João Gerente',
-        email: 'gerente@bvolt.com',
+        usuario: 'gerente',
         password: '123456',
-        tipo: 'gerente'
+        tipo: 'gerente',
+        permissions: getDefaultPermissions('gerente')
     },
     {
         id: '3',
         nome: 'Maria Vendedora',
-        email: 'vendedor@bvolt.com',
+        usuario: 'vendedor',
         password: '123456',
-        tipo: 'vendedor'
+        tipo: 'vendedor',
+        permissions: getDefaultPermissions('vendedor')
     }
 ];
 
@@ -67,14 +139,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 
     // Função para fazer login (simulação de API)
-    const login = async (email: string, password: string): Promise<boolean> => {
+    const login = async (usuario: string, password: string): Promise<boolean> => {
         setLoading(true);
 
         // Simula delay de requisição para API
         await new Promise(resolve => setTimeout(resolve, 1000));
 
         // Busca usuário nos dados mockados
-        const foundUser = mockUsers.find(u => u.email === email && u.password === password);
+        const foundUser = mockUsers.find(u => u.usuario === usuario && u.password === password);
 
         if (foundUser) {
             const { password: _, ...userWithoutPassword } = foundUser;
@@ -96,8 +168,22 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         localStorage.removeItem('bvolt-user');
     };
 
-    // Função para verificar permissões do usuário
-    const hasPermission = (requiredRoles: UserType[]): boolean => {
+    // Função para verificar permissões por módulo e ação
+    const hasPermission = (module: string, action: string): boolean => {
+        if (!user) return false;
+
+        // Admin tem acesso a tudo
+        if (user.tipo === 'admin') return true;
+
+        // Verifica permissão específica no módulo
+        const modulePermissions = user.permissions[module as keyof UserPermissions];
+        if (!modulePermissions) return false;
+
+        return modulePermissions[action as keyof Permission] === true;
+    };
+
+    // Função para verificar permissões por papel (compatibilidade)
+    const hasRolePermission = (requiredRoles: UserType[]): boolean => {
         if (!user) return false;
 
         // Admin tem acesso a tudo
@@ -144,7 +230,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         logout,
         isAuthenticated: !!user,
         loading,
-        hasPermission
+        hasPermission,
+        hasRolePermission,
+        getDefaultPermissions
     };
 
     return (

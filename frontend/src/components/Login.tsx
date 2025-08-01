@@ -5,12 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Eye, EyeOff, Lock, Mail, LogIn } from 'lucide-react';
+import { Eye, EyeOff, Lock, User, LogIn } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 const Login: React.FC = () => {
     // Estados para controlar os campos do formulário
-    const [email, setEmail] = useState('');
+    const [usuario, setUsuario] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -23,7 +23,7 @@ const Login: React.FC = () => {
         e.preventDefault();
 
         // Validação básica dos campos
-        if (!email || !password) {
+        if (!usuario || !password) {
             toast({
                 title: "Erro de validação",
                 description: "Por favor, preencha todos os campos.",
@@ -36,7 +36,7 @@ const Login: React.FC = () => {
 
         try {
             // Tenta fazer login
-            const success = await login(email, password);
+            const success = await login(usuario, password);
 
             if (success) {
                 toast({
@@ -46,7 +46,7 @@ const Login: React.FC = () => {
             } else {
                 toast({
                     title: "Erro no login",
-                    description: "Email ou senha incorretos.",
+                    description: "Usuário ou senha incorretos.",
                     variant: "destructive"
                 });
             }
@@ -64,12 +64,12 @@ const Login: React.FC = () => {
     // Função para preencher dados de demonstração
     const fillDemoData = (userType: 'admin' | 'gerente' | 'vendedor') => {
         const demoUsers = {
-            admin: { email: 'admin@bvolt.com', password: '123456' },
-            gerente: { email: 'gerente@bvolt.com', password: '123456' },
-            vendedor: { email: 'vendedor@bvolt.com', password: '123456' }
+            admin: { usuario: 'admin', password: '123456' },
+            gerente: { usuario: 'gerente', password: '123456' },
+            vendedor: { usuario: 'vendedor', password: '123456' }
         };
 
-        setEmail(demoUsers[userType].email);
+        setUsuario(demoUsers[userType].usuario);
         setPassword(demoUsers[userType].password);
     };
 
@@ -106,17 +106,16 @@ const Login: React.FC = () => {
 
                     <CardContent>
                         <form onSubmit={handleSubmit} className="space-y-4">
-                            {/* Campo de email */}
+                            {/* Campo de usuário */}
                             <div className="space-y-2">
-                                <Label htmlFor="email">Email</Label>
+                                <Label htmlFor="usuario">Usuário</Label>
                                 <div className="relative">
-                                    <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+                                    <User className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                                     <Input
-                                        id="email"
-                                        type="email"
-                                        placeholder="seu@email.com"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        id="usuario"
+                                        placeholder="Digite seu usuário"
+                                        value={usuario}
+                                        onChange={(e) => setUsuario(e.target.value)}
                                         className="pl-10"
                                         disabled={isLoading}
                                     />

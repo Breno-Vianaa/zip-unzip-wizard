@@ -26,7 +26,7 @@ export const UserModal: React.FC<UserModalProps> = ({
     const { user } = useAuth();
     const [formData, setFormData] = useState({
         nome: editingUser?.nome || '',
-        email: editingUser?.email || '',
+        usuario: editingUser?.usuario || '',
         tipo: editingUser?.tipo || 'vendedor' as UserType,
         senha: '',
         confirmarSenha: ''
@@ -87,12 +87,11 @@ export const UserModal: React.FC<UserModalProps> = ({
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="usuario">Usuário</Label>
                         <Input
-                            id="email"
-                            type="email"
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            id="usuario"
+                            value={formData.usuario}
+                            onChange={(e) => setFormData({ ...formData, usuario: e.target.value })}
                             required
                         />
                     </div>
