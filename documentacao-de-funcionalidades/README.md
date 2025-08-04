@@ -2,93 +2,169 @@
 
 ## 🎯 Visão Geral
 
-Este diretório contém a documentação completa de todas as funcionalidades do sistema BVOLT, voltada para usuários finais, administradores e equipe de suporte.
+O Sistema BVOLT é um ERP completo desenvolvido para pequenas e médias empresas brasileiras. Este guia contém todas as informações necessárias para utilizar o sistema de forma eficiente, desde o primeiro acesso até funcionalidades avançadas.
+
+## 🚀 Primeiros Passos
+
+### 1. Acesso ao Sistema
+- Acesse a URL fornecida pela sua empresa
+- Use suas credenciais de usuário e senha (não email)
+- O sistema detectará automaticamente seu nível de acesso
+
+### 2. Navegação Inicial
+- **Sidebar**: Menu principal com todas as funcionalidades
+- **Dashboard**: Visão geral do negócio com métricas importantes
+- **Perfil**: Canto superior direito para configurações pessoais
+- **Tema**: Alterne entre modo claro/escuro
+
+### 3. Primeira Configuração
+1. Vá em **Configurações** > **Geral**
+2. Configure dados da empresa
+3. Defina preferências de sistema
+4. Teste as funcionalidades básicas
 
 ## 📂 Estrutura da Documentação
 
-### 🔐 Autenticação e Segurança
-- **[Autenticação](./autenticacao.md)** - Sistema de login, logout e gerenciamento de sessão
-- **[Gerenciamento de Usuários](./gerenciamento-usuarios.md)** - Cadastro, edição e permissões de usuários
+## 📋 Funcionalidades Principais
 
-### 📊 Dashboard e Visão Geral
-- **[Dashboard Principal](./dashboard.md)** - Painel de controle com métricas e visão geral do negócio
+### 🏠 Dashboard
+- **Métricas em Tempo Real**: Vendas, estoque, clientes, receita
+- **Gráficos Interativos**: Vendas por período, produtos mais vendidos
+- **Alertas Inteligentes**: Estoque baixo, metas, pagamentos em atraso
+- **Ações Rápidas**: Criar venda, cadastrar produto, ver relatórios
 
-### 🛍️ Gestão Comercial
-- **[Gestão de Produtos](./gestao-produtos.md)** - Cadastro, edição e organização de produtos
-- **[Gestão de Categorias](./gestao-categorias.md)** - Organização e classificação de produtos
-- **[Gestão de Vendas](./gestao-vendas.md)** - Processo completo de vendas e faturamento
+### 🛍️ Gestão de Vendas
+- **Processo Completo**: Cliente → Produtos → Pagamento → Finalização
+- **Múltiplas Formas de Pagamento**: Dinheiro, Cartão, PIX, Boleto
+- **Histórico Detalhado**: Todas as vendas com filtros avançados
+- **Comprovantes**: Geração automática de recibos em PDF
+- **Integração**: Atualização automática de estoque e financeiro
 
-### 👥 Relacionamento
-- **[Gestão de Clientes](./gestao-clientes.md)** - Cadastro e acompanhamento de clientes
-- **[Gestão de Fornecedores](./gestao-fornecedores.md)** - Gerenciamento de fornecedores e parceiros
+### 📦 Controle de Estoque
+- **Scanner de Código de Barras**: Entrada/saída rápida de produtos
+- **Estoque Mínimo**: Alertas automáticos para reposição
+- **Movimentações**: Histórico completo de entradas e saídas
+- **Relatórios**: Produtos em baixa, validade, inventário
 
-### 📦 Operações
-- **[Controle de Estoque](./controle-estoque.md)** - Gerenciamento de inventário e movimentações
-- **[Configurações](./configuracoes.md)** - Personalização do sistema
+### 👥 Gestão de Clientes
+- **Cadastro Completo**: CPF/CNPJ, endereço com busca por CEP
+- **Histórico de Compras**: Todas as vendas do cliente
+- **Segmentação**: Filtros por localização, faturamento, frequência
 
-### 📈 Relatórios e Análises
-- **[Sistema de Relatórios](./relatorios.md)** - Geração de relatórios e análises de negócio
+### 🏢 Gestão de Fornecedores
+- **Dados Empresariais**: CNPJ, contatos, endereço completo
+- **Relacionamento**: Histórico de compras e negociações
+- **Categorização**: Organização por tipo de produto/serviço
 
-## 🎯 Níveis de Acesso
+### 💰 Módulo Financeiro
+- **Contas a Pagar/Receber**: Controle completo de fluxo de caixa
+- **Dashboard Financeiro**: Indicadores, saldos, previsões
+- **Vencimentos**: Alertas de contas próximas ao vencimento
+- **Relatórios**: Demonstrativos financeiros em PDF
 
-### 👨‍💼 Administrador (Admin)
-- **Acesso Total**: Todas as funcionalidades do sistema
-- **Usuários**: Pode criar, editar e remover usuários
-- **Configurações**: Acesso completo às configurações do sistema
-- **Relatórios**: Todos os relatórios disponíveis
-- **Dados**: Pode visualizar e modificar todos os dados
+### 💳 Sistema de Pagamentos
+- **Gateways Integrados**: MercadoPago, PagSeguro, Stripe, PayPal
+- **Métodos**: PIX, Cartão, Boleto, Transferência
+- **Confirmação Automática**: Webhooks para atualização de status
+- **Histórico**: Todas as transações com detalhes
+
+### 📊 Relatórios Avançados
+- **Vendas**: Por período, vendedor, produto, cliente
+- **Estoque**: Movimentações, inventário, produtos em baixa
+- **Financeiro**: Fluxo de caixa, contas, demonstrativos
+- **Clientes**: Ranking, segmentação, histórico
+- **Exportação**: PDF com gráficos e tabelas detalhadas
+
+### ⚙️ Configurações
+- **Empresa**: Logo, dados, informações fiscais
+- **Sistema**: Tema, notificações, backup automático
+- **Usuários**: Gestão de permissões e acessos
+- **Personalização**: Layout, cores, preferências
+
+## 🔐 Sistema de Permissões
+
+### 👨‍💼 Administrador
+**Acesso Total ao Sistema**
+- ✅ Todas as funcionalidades sem restrições
+- ✅ Gestão completa de usuários (criar, editar, remover)
+- ✅ Configurações avançadas do sistema
+- ✅ Backup e restauração de dados
+- ✅ Logs de auditoria e segurança
+- ✅ Integração com gateways de pagamento
+- ✅ Todos os relatórios e dashboards
 
 ### 👨‍💻 Gerente
-- **Gestão Comercial**: Produtos, vendas, clientes e fornecedores
-- **Relatórios**: Relatórios operacionais e gerenciais
-- **Estoque**: Controle completo de estoque
-- **Usuários**: Pode gerenciar vendedores (criar/editar, não remover)
-- **Limitações**: Não pode alterar configurações críticas do sistema
+**Gestão Operacional Completa**
+- ✅ Dashboard com todas as métricas
+- ✅ Vendas (criar, editar, visualizar todas)
+- ✅ Produtos (gerenciamento completo)
+- ✅ Estoque (controle total + scanner)
+- ✅ Clientes e Fornecedores (CRUD completo)
+- ✅ Financeiro (contas a pagar/receber)
+- ✅ Relatórios gerenciais
+- ✅ Gerenciar vendedores (não pode remover)
+- ❌ Configurações críticas do sistema
+- ❌ Gestão de outros gerentes/admins
 
 ### 👨‍💼 Vendedor
-- **Vendas**: Pode realizar vendas e consultar histórico próprio
-- **Clientes**: Pode cadastrar e editar clientes
-- **Produtos**: Pode consultar produtos e verificar estoque
-- **Relatórios**: Apenas relatórios de suas próprias vendas
-- **Limitações**: Não pode acessar configurações ou dados de outros vendedores
+**Foco em Vendas e Atendimento**
+- ✅ Dashboard pessoal com suas métricas
+- ✅ Realizar vendas
+- ✅ Cadastrar e editar clientes
+- ✅ Consultar produtos e estoque
+- ✅ Scanner de código de barras
+- ✅ Relatórios das próprias vendas
+- ❌ Visualizar vendas de outros vendedores
+- ❌ Gestão de estoque (apenas consulta)
+- ❌ Fornecedores
+- ❌ Módulo financeiro
+- ❌ Configurações
 
-## 🔄 Fluxos Principais
+## 🔄 Fluxos de Trabalho
 
-### 🛒 Fluxo de Venda
-```mermaid
-graph TD
-    A[Iniciar Venda] --> B[Selecionar Cliente]
-    B --> C[Adicionar Produtos]
-    C --> D[Calcular Total]
-    D --> E[Escolher Forma de Pagamento]
-    E --> F[Confirmar Venda]
-    F --> G[Atualizar Estoque]
-    G --> H[Gerar Comprovante]
-```
+### 🛒 Realizando uma Venda
+1. **Acesse**: Menu → Vendas → Nova Venda
+2. **Cliente**: Selecione cliente existente ou cadastre novo
+3. **Produtos**: 
+   - Digite nome/código do produto
+   - Use scanner de código de barras
+   - Defina quantidade
+4. **Pagamento**: Escolha forma de pagamento
+5. **Finalização**: Confirme e gere comprovante
+6. **Automático**: Sistema atualiza estoque e financeiro
 
-### 📦 Fluxo de Estoque
-```mermaid
-graph TD
-    A[Receber Produtos] --> B[Registrar Entrada]
-    B --> C[Atualizar Quantidade]
-    C --> D[Verificar Estoque Mínimo]
-    D --> E{Abaixo do Mínimo?}
-    E -->|Sim| F[Gerar Alerta]
-    E -->|Não| G[Processo Concluído]
-    F --> G
-```
+### 📦 Gerenciando Estoque
+1. **Entrada de Produtos**:
+   - Vá em Estoque → Movimentações
+   - Clique em "Nova Entrada"
+   - Use scanner ou digite código
+   - Informe quantidade e valor
+2. **Alertas**: Sistema avisa quando estoque está baixo
+3. **Relatórios**: Acompanhe movimentações e inventário
 
-### 👤 Fluxo de Cliente
-```mermaid
-graph TD
-    A[Novo Cliente] --> B[Preencher Dados]
-    B --> C[Validar CPF/CNPJ]
-    C --> D{Válido?}
-    D -->|Não| B
-    D -->|Sim| E[Buscar CEP]
-    E --> F[Preencher Endereço]
-    F --> G[Salvar Cliente]
-```
+### 👥 Cadastrando Clientes
+1. **Acesse**: Menu → Clientes → Novo Cliente
+2. **Dados Básicos**: Nome, CPF/CNPJ, telefone
+3. **Endereço**: Digite CEP e sistema preenche automaticamente
+4. **Validação**: Sistema valida CPF/CNPJ automaticamente
+5. **Histórico**: Após salvar, acompanhe compras do cliente
+
+### 💰 Controle Financeiro
+1. **Contas a Receber**:
+   - Vendas geram automaticamente contas a receber
+   - Acompanhe vencimentos no dashboard
+   - Marque como pago quando receber
+2. **Contas a Pagar**:
+   - Cadastre manualmente gastos e compras
+   - Configure lembretes de vencimento
+   - Gerencie fluxo de caixa
+
+### 📊 Gerando Relatórios
+1. **Acesse**: Menu → Relatórios
+2. **Selecione**: Tipo de relatório desejado
+3. **Filtre**: Por período, vendedor, produto, etc.
+4. **Exporte**: Baixe PDF com gráficos e tabelas
+5. **Histórico**: Acesse relatórios anteriores
 
 ## 🎨 Interface do Usuário
 
