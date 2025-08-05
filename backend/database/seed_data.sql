@@ -16,17 +16,18 @@ INSERT INTO categorias_produtos (id, nome, descricao, cor, icone) VALUES
 (uuid_generate_v4(), 'Áudio e Vídeo', 'Fones, caixas de som e equipamentos de áudio', '#F59E0B', 'headphones'),
 (uuid_generate_v4(), 'Gaming', 'Produtos para jogos e entretenimento', '#EF4444', 'gamepad');
 
--- Inserir fornecedores de exemplo
-INSERT INTO fornecedores (id, nome, razao_social, cnpj, email, telefone, endereco) VALUES
-(uuid_generate_v4(), 'TechDistribuidora', 'Tech Distribuidora LTDA', '12.345.678/0001-90', 'contato@techdist.com.br', '(11) 3456-7890', '{"rua": "Rua das Tecnologias, 123", "cidade": "São Paulo", "estado": "SP", "cep": "01234-567"}'),
-(uuid_generate_v4(), 'InfoSupplier', 'Info Supplier Comércio LTDA', '98.765.432/0001-10', 'vendas@infosupplier.com.br', '(11) 2345-6789', '{"rua": "Av. da Informática, 456", "cidade": "São Paulo", "estado": "SP", "cep": "12345-678"}'),
-(uuid_generate_v4(), 'GameStore Atacado', 'GameStore Atacadista S.A.', '11.222.333/0001-44', 'atacado@gamestore.com.br', '(11) 4567-8901', '{"rua": "Rua dos Games, 789", "cidade": "São Paulo", "estado": "SP", "cep": "23456-789"}');
+-- Fornecedores e clientes de exemplo comentados (descomente se necessário para testes)
+-- Para remover dados fictícios, mantenha estas linhas comentadas
 
--- Inserir clientes de exemplo
-INSERT INTO clientes (id, nome, email, telefone, cpf, endereco) VALUES
-(uuid_generate_v4(), 'João Silva', 'joao.silva@email.com', '(11) 98765-4321', '123.456.789-00', '{"rua": "Rua A, 123", "cidade": "São Paulo", "estado": "SP", "cep": "01000-000"}'),
-(uuid_generate_v4(), 'Maria Oliveira', 'maria.oliveira@email.com', '(11) 87654-3210', '987.654.321-00', '{"rua": "Rua B, 456", "cidade": "São Paulo", "estado": "SP", "cep": "02000-000"}'),
-(uuid_generate_v4(), 'Pedro Santos', 'pedro.santos@email.com', '(11) 76543-2109', '456.789.123-00', '{"rua": "Rua C, 789", "cidade": "São Paulo", "estado": "SP", "cep": "03000-000"}');
+-- INSERT INTO fornecedores (id, nome, razao_social, cnpj, email, telefone, endereco) VALUES
+-- (uuid_generate_v4(), 'TechDistribuidora', 'Tech Distribuidora LTDA', '12.345.678/0001-90', 'contato@techdist.com.br', '(11) 3456-7890', '{"rua": "Rua das Tecnologias, 123", "cidade": "São Paulo", "estado": "SP", "cep": "01234-567"}'),
+-- (uuid_generate_v4(), 'InfoSupplier', 'Info Supplier Comércio LTDA', '98.765.432/0001-10', 'vendas@infosupplier.com.br', '(11) 2345-6789', '{"rua": "Av. da Informática, 456", "cidade": "São Paulo", "estado": "SP", "cep": "12345-678"}'),
+-- (uuid_generate_v4(), 'GameStore Atacado', 'GameStore Atacadista S.A.', '11.222.333/0001-44', 'atacado@gamestore.com.br', '(11) 4567-8901', '{"rua": "Rua dos Games, 789", "cidade": "São Paulo", "estado": "SP", "cep": "23456-789"}');
+
+-- INSERT INTO clientes (id, nome, email, telefone, cpf, endereco) VALUES
+-- (uuid_generate_v4(), 'João Silva', 'joao.silva@email.com', '(11) 98765-4321', '123.456.789-00', '{"rua": "Rua A, 123", "cidade": "São Paulo", "estado": "SP", "cep": "01000-000"}'),
+-- (uuid_generate_v4(), 'Maria Oliveira', 'maria.oliveira@email.com', '(11) 87654-3210', '987.654.321-00', '{"rua": "Rua B, 456", "cidade": "São Paulo", "estado": "SP", "cep": "02000-000"}'),
+-- (uuid_generate_v4(), 'Pedro Santos', 'pedro.santos@email.com', '(11) 76543-2109', '456.789.123-00', '{"rua": "Rua C, 789", "cidade": "São Paulo", "estado": "SP", "cep": "03000-000"}');
 
 -- Inserir configurações padrão do sistema
 INSERT INTO configuracoes (chave, valor, descricao, tipo) VALUES
