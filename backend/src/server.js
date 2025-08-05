@@ -21,8 +21,9 @@ const salesRoutes = require('./routes/sales');
 const stockRoutes = require('./routes/stock');
 const configRoutes = require('./routes/config');
 const reportRoutes = require('./routes/reports');
+const dashboardRoutes = require('./routes/dashboard');
 
-const errorHandler = require('./middleware/errorHandler');
+const errorHandler = require('./middlewares/errorHandler');
 const { connectDB } = require('./database/connection');
 
 const app = express();
@@ -64,6 +65,7 @@ app.use('/api/sales', salesRoutes);
 app.use('/api/stock', stockRoutes);
 app.use('/api/config', configRoutes);
 app.use('/api/reports', reportRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // Rota de health check
 app.get('/health', (req, res) => {
