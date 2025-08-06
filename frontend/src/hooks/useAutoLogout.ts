@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
 
 /**
  * Hook personalizado para gerenciar auto-logout por inatividade
@@ -37,7 +37,7 @@ export const useAutoLogout = (timeoutMinutes: number = 10) => {
         }
 
         // Timer principal para logout
-        timeoutRef.current = setTimeout(() => {
+        timeoutRef.current = setTimeout(async () => {
             setIsActive(false);
             toast({
                 title: "Sessão Encerrada",
@@ -46,8 +46,8 @@ export const useAutoLogout = (timeoutMinutes: number = 10) => {
             });
 
             // Delay pequeno para mostrar a mensagem antes do logout
-            setTimeout(() => {
-                logout();
+            setTimeout(async () => {
+                await logout();
             }, 2000);
         }, timeoutMinutes * 60 * 1000);
     };

@@ -10,7 +10,7 @@ import { toast } from '@/hooks/use-toast';
 
 const Login: React.FC = () => {
     // Estados para controlar os campos do formulário
-    const [usuario, setUsuario] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -23,10 +23,21 @@ const Login: React.FC = () => {
         e.preventDefault();
 
         // Validação básica dos campos
-        if (!usuario || !password) {
+        if (!email || !password) {
             toast({
                 title: "Erro de validação",
                 description: "Por favor, preencha todos os campos.",
+                variant: "destructive"
+            });
+            return;
+        }
+
+        // Validação de email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            toast({
+                title: "Email inválido",
+                description: "Por favor, insira um email válido.",
                 variant: "destructive"
             });
             return;
@@ -36,20 +47,15 @@ const Login: React.FC = () => {
 
         try {
             // Tenta fazer login
-            const success = await login(usuario, password);
+            const success = await login(email, password);
 
             if (success) {
                 toast({
                     title: "Login realizado com sucesso!",
                     description: "Bem-vindo ao BVOLT Sistemas.",
                 });
-            } else {
-                toast({
-                    title: "Erro no login",
-                    description: "Usuário ou senha incorretos.",
-                    variant: "destructive"
-                });
             }
+            // Error handling is now done in AuthContext
         } catch (error) {
             toast({
                 title: "Erro interno",
@@ -64,12 +70,12 @@ const Login: React.FC = () => {
     // Função para preencher dados de demonstração
     const fillDemoData = (userType: 'admin' | 'gerente' | 'vendedor') => {
         const demoUsers = {
-            admin: { usuario: 'admin', password: '123456' },
-            gerente: { usuario: 'gerente', password: '123456' },
-            vendedor: { usuario: 'vendedor', password: '123456' }
+            admin: { email: 'admin@bvolt.com', password: 'admin123' },
+            gerente: { email: 'gerente@bvolt.com', password: 'gerente123' },
+            vendedor: { email: 'vendedor@bvolt.com', password: 'vendedor123' }
         };
 
-        setUsuario(demoUsers[userType].usuario);
+        setEmail(demoUsers[userType].email);
         setPassword(demoUsers[userType].password);
     };
 
@@ -106,16 +112,17 @@ const Login: React.FC = () => {
 
                     <CardContent>
                         <form onSubmit={handleSubmit} className="space-y-4">
-                            {/* Campo de usuário */}
+                            {/* Campo de email */}
                             <div className="space-y-2">
-                                <Label htmlFor="usuario">Usuário</Label>
+                                <Label htmlFor="email">Email</Label>
                                 <div className="relative">
                                     <User className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                                     <Input
-                                        id="usuario"
-                                        placeholder="Digite seu usuário"
-                                        value={usuario}
-                                        onChange={(e) => setUsuario(e.target.value)}
+                                        id="email"
+                                        type="email"
+                                        placeholder="Digite seu email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                         className="pl-10"
                                         disabled={isLoading}
                                     />

@@ -1,5 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { api, User as ApiUser } from '../lib/api';
+import { toast } from '@/hooks/use-toast';
 
 // Tipos de usuário do sistema BVOLT
 export type UserType = 'admin' | 'gerente' | 'vendedor';
@@ -24,26 +26,32 @@ export interface UserPermissions {
     configuracoes: Permission;
 }
 
-// Interface para o usuário logado
+// Interface para o usuário logado (adaptada para usar dados da API)
 export interface User {
     id: string;
     nome: string;
-    usuario: string;
+    email: string;
     tipo: UserType;
     permissions: UserPermissions;
-    avatar?: string;
+    avatar_url?: string;
+    telefone?: string;
+    endereco?: string;
+    ativo: boolean;
+    data_cadastro: string;
+    ultimo_login?: string;
 }
 
 // Interface para o contexto de autenticação
 interface AuthContextType {
     user: User | null;
-    login: (usuario: string, password: string) => Promise<boolean>;
-    logout: () => void;
+    login: (email: string, password: string) => Promise<boolean>;
+    logout: () => Promise<void>;
     isAuthenticated: boolean;
     loading: boolean;
     hasPermission: (module: string, action: string) => boolean;
     hasRolePermission: (requiredRole: UserType[]) => boolean;
     getDefaultPermissions: (tipo: UserType) => UserPermissions;
+    refreshToken: () => Promise<void>;
 }
 
 // Criação do contexto
@@ -104,33 +112,22 @@ const getDefaultPermissions = (tipo: UserType): UserPermissions => {
     return basePermissions;
 };
 
-// Dados mockados dos usuários para demonstração
-const mockUsers: (User & { password: string })[] = [
-    {
-        id: '1',
-        nome: 'Admin Sistema',
-        usuario: 'admin',
-        password: '123456',
-        tipo: 'admin',
-        permissions: getDefaultPermissions('admin')
-    },
-    {
-        id: '2',
-        nome: 'João Gerente',
-        usuario: 'gerente',
-        password: '123456',
-        tipo: 'gerente',
-        permissions: getDefaultPermissions('gerente')
-    },
-    {
-        id: '3',
-        nome: 'Maria Vendedora',
-        usuario: 'vendedor',
-        password: '123456',
-        tipo: 'vendedor',
-        permissions: getDefaultPermissions('vendedor')
-    }
-];
+// Função para converter usuário da API para formato local
+const convertApiUserToUser = (apiUser: ApiUser): User => {
+    return {
+        id: apiUser.id,
+        nome: apiUser.nome,
+        email: apiUser.email,
+        tipo: apiUser.tipo as UserType,
+        permissions: getDefaultPermissions(apiUser.tipo as UserType),
+        avatar_url: apiUser.avatar_url,
+        telefone: apiUser.telefone,
+        endereco: apiUser.endereco,
+        ativo: apiUser.ativo,
+        data_cadastro: apiUser.data_cadastro,
+        ultimo_login: apiUser.ultimo_login,
+    };
+};
 
 // Provider do contexto de autenticação
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -138,34 +135,77 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [loading, setLoading] = useState(true);
 
 
-    // Função para fazer login (simulação de API)
-    const login = async (usuario: string, password: string): Promise<boolean> => {
+    // Função para fazer login usando a API real
+    const login = async (email: string, password: string): Promise<boolean> => {
         setLoading(true);
 
-        // Simula delay de requisição para API
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        // Busca usuário nos dados mockados
-        const foundUser = mockUsers.find(u => u.usuario === usuario && u.password === password);
-
-        if (foundUser) {
-            const { password: _, ...userWithoutPassword } = foundUser;
-            setUser(userWithoutPassword);
+        try {
+            const response = await api.login(email, password);
+            const userConverted = convertApiUserToUser(response.user);
+            setUser(userConverted);
 
             // Salva no localStorage para persistir a sessão
-            localStorage.setItem('bvolt-user', JSON.stringify(userWithoutPassword));
+            localStorage.setItem('bvolt-user', JSON.stringify(userConverted));
             setLoading(false);
             return true;
+        } catch (error) {
+            console.error('Erro no login:', error);
+            setLoading(false);
+            
+            // Tratamento específico de erros de autenticação
+            if (error instanceof Error) {
+                if (error.message.includes('401') || error.message.includes('INVALID_CREDENTIALS')) {
+                    toast({
+                        title: "Credenciais inválidas",
+                        description: "Email ou senha incorretos.",
+                        variant: "destructive"
+                    });
+                } else if (error.message.includes('USER_INACTIVE')) {
+                    toast({
+                        title: "Usuário inativo",
+                        description: "Sua conta foi desativada. Entre em contato com o administrador.",
+                        variant: "destructive"
+                    });
+                } else {
+                    toast({
+                        title: "Erro no login",
+                        description: "Falha na comunicação com o servidor. Tente novamente.",
+                        variant: "destructive"
+                    });
+                }
+            }
+            return false;
         }
-
-        setLoading(false);
-        return false;
     };
 
-    // Função para fazer logout
-    const logout = () => {
-        setUser(null);
-        localStorage.removeItem('bvolt-user');
+    // Função para fazer logout usando a API real
+    const logout = async () => {
+        try {
+            await api.logout();
+        } catch (error) {
+            console.error('Erro no logout:', error);
+            // Continue with logout even if API call fails
+        } finally {
+            setUser(null);
+            localStorage.removeItem('bvolt-user');
+        }
+    };
+
+    // Função para renovar token
+    const refreshToken = async () => {
+        try {
+            await api.refreshToken();
+            // Token é automaticamente atualizado na instância da API
+        } catch (error) {
+            console.error('Erro ao renovar token:', error);
+            // Se falhar ao renovar, fazer logout
+            await logout();
+            toast({
+                title: "Sessão expirada",
+                description: "Sua sessão expirou. Faça login novamente.",
+                variant: "destructive"
+            });
+        }
     };
 
     // Função para verificar permissões por módulo e ação
@@ -193,29 +233,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         return requiredRoles.includes(user.tipo);
     };
 
-    // Recupera usuário do localStorage ao inicializar - com segurança adicional
+    // Recupera usuário e valida autenticação ao inicializar
     useEffect(() => {
-        const checkAuth = () => {
-            // Por segurança, sempre redirecionar para login ao recarregar a página
-            const isPageReload = window.performance.navigation.type === 1 ||
-                (window.performance.getEntriesByType('navigation')[0] as any)?.type === 'reload';
-
-            if (isPageReload) {
-                // Limpa dados de autenticação ao recarregar por segurança
-                localStorage.removeItem('bvolt-user');
-                setUser(null);
-                setLoading(false);
-                return;
-            }
-
-            // Verifica autenticação normal apenas se não for reload
+        const checkAuth = async () => {
             const savedUser = localStorage.getItem('bvolt-user');
-            if (savedUser) {
+            const token = localStorage.getItem('token');
+
+            if (savedUser && token) {
                 try {
-                    setUser(JSON.parse(savedUser));
+                    // Valida o token com o servidor
+                    const response = await api.getCurrentUser();
+                    const userConverted = convertApiUserToUser(response.user);
+                    setUser(userConverted);
+                    
+                    // Atualiza dados salvos se necessário
+                    localStorage.setItem('bvolt-user', JSON.stringify(userConverted));
                 } catch (error) {
-                    console.error('Erro ao carregar usuário do localStorage:', error);
+                    console.error('Erro ao validar autenticação:', error);
+                    // Token inválido ou expirado, limpar dados
                     localStorage.removeItem('bvolt-user');
+                    localStorage.removeItem('token');
+                    setUser(null);
                 }
             }
             setLoading(false);
@@ -223,6 +261,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
         checkAuth();
     }, []);
+
+    // Configurar interceptador para lidar com tokens expirados
+    useEffect(() => {
+        const setupTokenRefresh = () => {
+            // Interceptar requisições que falham com 401
+            const originalRequest = api.get;
+            // Note: This is a simplified approach. In a real app, you'd want to 
+            // implement proper request/response interceptors
+        };
+
+        if (user) {
+            setupTokenRefresh();
+        }
+    }, [user]);
 
     const value: AuthContextType = {
         user,
@@ -232,7 +284,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         loading,
         hasPermission,
         hasRolePermission,
-        getDefaultPermissions
+        getDefaultPermissions,
+        refreshToken
     };
 
     return (

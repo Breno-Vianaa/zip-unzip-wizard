@@ -48,7 +48,8 @@ class ApiClient {
    */
   private async request<T>(
     endpoint: string, 
-    options: RequestInit = {}
+    options: RequestInit = {},
+    retryOnTokenExpired: boolean = true
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     
@@ -65,6 +66,24 @@ class ApiClient {
       
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
+        
+        // Se for erro de token expirado e ainda não tentamos renovar
+        if (response.status === 401 && 
+            errorData.code === 'TOKEN_EXPIRED' && 
+            retryOnTokenExpired && 
+            endpoint !== '/auth/refresh') {
+          
+          try {
+            // Tenta renovar o token
+            await this.refreshToken();
+            // Refaz a requisição com o novo token
+            return this.request<T>(endpoint, options, false);
+          } catch (refreshError) {
+            // Se falhar na renovação, propaga o erro original
+            throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+          }
+        }
+        
         throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
       }
 
