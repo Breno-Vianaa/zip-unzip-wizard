@@ -11,6 +11,9 @@ ALTER TABLE profiles RENAME COLUMN senha TO senha_hash;
 ALTER TABLE profiles RENAME COLUMN ultimo_acesso TO ultimo_login;
 ALTER TABLE profiles RENAME COLUMN avatar TO avatar_url;
 
+-- Add missing columns that backend expects
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS endereco TEXT;
+
 -- Update indexes that reference the old table name
 DROP INDEX IF EXISTS idx_usuarios_email;
 DROP INDEX IF EXISTS idx_usuarios_tipo;
