@@ -239,10 +239,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             const savedUser = localStorage.getItem('bvolt-user');
             const token = localStorage.getItem('token');
 
+            console.log('CheckAuth - savedUser:', savedUser);
+            console.log('CheckAuth - token:', token);
+
             if (savedUser && token) {
                 try {
+                    console.log('Validando token com servidor...');
                     // Valida o token com o servidor
                     const response = await api.getCurrentUser();
+                    console.log('getCurrentUser response:', response);
                     const userConverted = convertApiUserToUser(response.user);
                     setUser(userConverted);
                     
