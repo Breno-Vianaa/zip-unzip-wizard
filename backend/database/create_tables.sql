@@ -9,16 +9,17 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 -- Tabela de usuários do sistema
-CREATE TABLE usuarios (
+CREATE TABLE profiles (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
-    senha VARCHAR(255) NOT NULL,
+    senha_hash VARCHAR(255) NOT NULL,
     tipo VARCHAR(20) NOT NULL CHECK (tipo IN ('admin', 'gerente', 'vendedor', 'operador')),
     telefone VARCHAR(20),
-    avatar TEXT,
+    avatar_url TEXT,
+    endereco TEXT,
     ativo BOOLEAN DEFAULT true,
-    ultimo_acesso TIMESTAMP,
+    ultimo_login TIMESTAMP,
     tentativas_login INTEGER DEFAULT 0,
     bloqueado_ate TIMESTAMP,
     data_cadastro TIMESTAMP DEFAULT NOW(),
@@ -100,7 +101,7 @@ CREATE TABLE produtos (
     imagem_principal TEXT,
     imagens_adicionais JSONB,
     ativo BOOLEAN DEFAULT true,
-    cadastrado_por UUID REFERENCES usuarios(id),
+    cadastrado_por UUID REFERENCES profiles(id),
     data_cadastro TIMESTAMP DEFAULT NOW(),
     data_atualizacao TIMESTAMP DEFAULT NOW()
 );
@@ -110,7 +111,7 @@ CREATE TABLE vendas (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     numero_venda SERIAL UNIQUE,
     cliente_id UUID REFERENCES clientes(id),
-    vendedor_id UUID REFERENCES usuarios(id) NOT NULL,
+    vendedor_id UUID REFERENCES profiles(id) NOT NULL,
     valor_total DECIMAL(12,2) NOT NULL DEFAULT 0,
     valor_desconto DECIMAL(12,2) DEFAULT 0,
     valor_final DECIMAL(12,2) NOT NULL DEFAULT 0,
@@ -154,7 +155,7 @@ CREATE TABLE movimentacoes_estoque (
     quantidade INTEGER NOT NULL,
     motivo VARCHAR(100),
     observacoes TEXT,
-    usuario_id UUID REFERENCES usuarios(id),
+    usuario_id UUID REFERENCES profiles(id),
     venda_id UUID REFERENCES vendas(id),
     data_movimentacao TIMESTAMP DEFAULT NOW()
 );
@@ -172,7 +173,7 @@ CREATE TABLE configuracoes (
 -- Tabela de logs do sistema
 CREATE TABLE logs_sistema (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    usuario_id UUID REFERENCES usuarios(id),
+    usuario_id UUID REFERENCES profiles(id),
     acao VARCHAR(100) NOT NULL,
     tabela_afetada VARCHAR(50),
     registro_id UUID,
@@ -184,8 +185,8 @@ CREATE TABLE logs_sistema (
 );
 
 -- Índices para melhor performance
-CREATE INDEX idx_usuarios_email ON usuarios(email);
-CREATE INDEX idx_usuarios_tipo ON usuarios(tipo);
+CREATE INDEX idx_profiles_email ON profiles(email);
+CREATE INDEX idx_profiles_tipo ON profiles(tipo);
 CREATE INDEX idx_produtos_categoria ON produtos(categoria_id);
 CREATE INDEX idx_produtos_fornecedor ON produtos(fornecedor_id);
 CREATE INDEX idx_produtos_codigo_interno ON produtos(codigo_interno);

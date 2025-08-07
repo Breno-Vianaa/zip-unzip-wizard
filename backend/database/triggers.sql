@@ -11,8 +11,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Triggers para atualizar data_atualizacao
-CREATE TRIGGER tr_usuarios_atualizacao
-    BEFORE UPDATE ON usuarios
+CREATE TRIGGER tr_profiles_atualizacao
+    BEFORE UPDATE ON profiles
     FOR EACH ROW
     EXECUTE FUNCTION atualizar_data_atualizacao();
 
@@ -148,8 +148,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Triggers para log em tabelas importantes
-CREATE TRIGGER tr_log_usuarios
-    AFTER INSERT OR UPDATE OR DELETE ON usuarios
+CREATE TRIGGER tr_log_profiles
+    AFTER INSERT OR UPDATE OR DELETE ON profiles
     FOR EACH ROW
     EXECUTE FUNCTION registrar_log();
 

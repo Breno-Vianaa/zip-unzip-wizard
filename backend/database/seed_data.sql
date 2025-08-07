@@ -2,10 +2,10 @@
 \c bvolt_db;
 
 -- Limpar dados existentes (cuidado em produção!)
-TRUNCATE TABLE logs_sistema, movimentacoes_estoque, pagamentos, itens_venda, vendas, produtos, clientes, fornecedores, categorias_produtos, usuarios, configuracoes RESTART IDENTITY CASCADE;
+TRUNCATE TABLE logs_sistema, movimentacoes_estoque, pagamentos, itens_venda, vendas, produtos, clientes, fornecedores, categorias_produtos, profiles, configuracoes RESTART IDENTITY CASCADE;
 
 -- Inserir usuário administrador padrão
-INSERT INTO usuarios (id, nome, email, senha, tipo, telefone, ativo) VALUES 
+INSERT INTO profiles (id, nome, email, senha_hash, tipo, telefone, ativo) VALUES 
 (uuid_generate_v4(), 'Administrador', 'admin@bvolt.com', crypt('admin123', gen_salt('bf', 12)), 'admin', '(11) 99999-9999', true);
 
 -- Inserir categorias de produtos padrão
@@ -49,7 +49,7 @@ COMMIT;
 
 -- Mostrar estatísticas
 SELECT 
-    'Usuários' as tabela, COUNT(*) as registros FROM usuarios
+    'Usuários' as tabela, COUNT(*) as registros FROM profiles
 UNION ALL
 SELECT 
     'Categorias' as tabela, COUNT(*) as registros FROM categorias_produtos
@@ -70,7 +70,7 @@ SELECT
     tipo,
     ativo,
     data_cadastro
-FROM usuarios 
+FROM profiles 
 WHERE tipo = 'admin';
 
 COMMIT;
